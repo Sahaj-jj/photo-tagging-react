@@ -1,0 +1,31 @@
+.level-header {
+  position: relative;
+  display: flex;
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.characters-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.character-wrapper {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  width: 50px;
+}
+
+.character-wrapper > img {
+  width: inherit;
+}
+
+.level-header > .name {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3rem;
+}
+
