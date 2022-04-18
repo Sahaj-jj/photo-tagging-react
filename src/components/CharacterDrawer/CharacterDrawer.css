@@ -1,0 +1,55 @@
+.character-drawer {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  background-color: white;
+  padding: .5rem;
+  border-radius: 5px;
+}
+
+.character-drawer > button.character-wrapper {
+  display: flex;
+  padding: .3rem .5rem;
+  width: 100%;
+  align-items: center;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  position: relative;
+}
+
+.character-drawer > button.character-wrapper.found {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.character-drawer > button.character-wrapper::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  height: 1px;
+  width: 100%;
+  top: calc(100% + .3rem);
+  left: 0;
+  background-color: var(--subdued-color);
+}
+
+.character-drawer > button.character-wrapper:last-child::after {
+  display: none;
+}
+
+.character-drawer > .character-wrapper > .character-name {
+  flex-grow: 1;
+}
+
+.character-drawer > .character-wrapper > img {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  width: 40px;
+}
+
+.character-drawer > .character-wrapper:hover {
+  background-color: var(--subdued-color);
+}
