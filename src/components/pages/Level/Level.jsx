@@ -4,23 +4,43 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import LevelHeader from '../../LevelHeader/LevelHeader';
+import CharacterDrawer from '../../CharacterDrawer/CharacterDrawer';
 import './Level.css';
+import isInBounds from '../../../utils';
 
 function Level({ levelID }) {
   const [characters, setCharacters] = useState([]);
   const [level, setLevel] = useState({});
   const [showDrawer, setShowDrawer] = useState(false);
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [loading, setLoading] = useState(true);
 
   const handleClick = async (e) => {
-    setShowDrawer(!showDrawer);
     const imgRect = e.target.getBoundingClientRect();
-    const relX = ((e.clientX - imgRect.left) / imgRect.width);
-    const relY = ((e.clientY - imgRect.top) / imgRect.height);
+    setShowDrawer(!showDrawer);
+    setCoords({ x: e.clientX - imgRect.left, y: e.clientY - imgRect.top });
+  };
+
+  const handleCharacterSelect = (characterID) => {
+    setShowDrawer(!showDrawer);
+
+    const imgRect = document.querySelector('.level-content > img').getBoundingClientRect();
+    const selectedCharcater = characters.find((char) => char.ID === characterID);
+    const characterCoords = {
+      x: selectedCharcater.relX * imgRect.width,
+      y: selectedCharcater.relY * imgRect.height,
+    };
 
     const marker = document.querySelector('.marker');
-    marker.style.display = showDrawer ? 'block' : 'none';
-    marker.style.setProperty('--posX', `${relX * imgRect.width}px`);
-    marker.style.setProperty('--posY', `${relY * imgRect.height}px`);
+    const markerRadius = +getComputedStyle(marker).getPropertyValue('--radius').slice(0, -2);
+
+    if (isInBounds(coords, characterCoords, markerRadius)) {
+      setCharacters(characters.map((character) => (character.ID === characterID
+        ? { ...character, found: true }
+        : character)));
+    } else {
+      console.log('NOPE');
+    }
   };
 
   const fetchCharacters = async (charactersInfo) => {
@@ -39,12 +59,7 @@ function Level({ levelID }) {
   const fetchLevel = async () => {
     const levelSnap = await getDoc(doc(getFirestore(), 'levels', levelID));
     const levelData = levelSnap.data();
-    setLevel({
-      ID: levelSnap.id,
-      name: `Level ${levelData.levelNumber} - ${levelData.location}`,
-      imageURL: levelData.imageURL,
-    });
-
+    setLevel({ ID: levelSnap.id, name: `${levelData.location}`, imageURL: levelData.imageURL });
     const charactersData = await fetchCharacters(levelData.characters);
     setCharacters(charactersData);
   };
@@ -53,12 +68,33 @@ function Level({ levelID }) {
     fetchLevel();
   }, []);
 
+  useEffect(() => {
+    if (showDrawer) {
+      const marker = document.querySelector('.marker');
+      marker.style.setProperty('--posX', `${coords.x}px`);
+      marker.style.setProperty('--posY', `${coords.y}px`);
+
+      const drawer = document.querySelector('.drawer-wrapper');
+      drawer.style.setProperty('--posX', `${coords.x}px`);
+      drawer.style.setProperty('--posY', `${coords.y}px`);
+    }
+  }, [coords]);
+
+  useEffect(() => {
+    if (!loading) document.querySelector('.level-content > img').classList.add('loaded');
+  }, [loading]);
+
   return (
     <div className="level-wrapper">
-      <LevelHeader name={level.name} characters={characters} />
+      {!loading && <LevelHeader characters={characters} />}
       <div className="level-content">
-        <div className="marker" />
-        <img src={level.imageURL} alt="" onClick={handleClick} />
+        {showDrawer && <div className="marker" />}
+        {showDrawer && (
+        <div className="drawer-wrapper">
+          <CharacterDrawer onCharacterSelect={handleCharacterSelect} characters={characters} />
+        </div>
+        )}
+        <img src={level.imageURL} alt="" onClick={handleClick} onLoad={() => { setLoading(false); }} />
       </div>
     </div>
   );
