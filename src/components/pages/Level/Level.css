@@ -1,0 +1,22 @@
+.level-content {
+  position: relative;
+}
+
+.level-content > img {
+  width: 100vw;
+}
+
+.marker {
+  --posX: 0;
+  --posY: 0;
+  --radius: 25px;
+  display: none;
+  position: absolute;
+  width: calc(2 * var(--radius));
+  aspect-ratio: 1;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 100%;
+  border: 3px solid white;
+  left: calc(var(--posX) - var(--radius));
+  top: calc(var(--posY) - var(--radius));
+}

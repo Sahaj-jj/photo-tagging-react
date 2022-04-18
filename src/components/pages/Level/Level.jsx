@@ -1,17 +1,27 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import LevelHeader from '../../LevelHeader/LevelHeader';
+import './Level.css';
 
 function Level({ levelID }) {
   const [characters, setCharacters] = useState([]);
   const [level, setLevel] = useState({});
-  // const handleClick = async (e) => {
-  //   const imgRect = e.target.getBoundingClientRect();
-  //   const relX = ((e.clientX - imgRect.left) / imgRect.width);
-  //   const relY = ((e.clientY - imgRect.top) / imgRect.height);
-  //   console.log(relX, relY);
-  // };
+  const [showDrawer, setShowDrawer] = useState(false);
+
+  const handleClick = async (e) => {
+    setShowDrawer(!showDrawer);
+    const imgRect = e.target.getBoundingClientRect();
+    const relX = ((e.clientX - imgRect.left) / imgRect.width);
+    const relY = ((e.clientY - imgRect.top) / imgRect.height);
+
+    const marker = document.querySelector('.marker');
+    marker.style.display = showDrawer ? 'block' : 'none';
+    marker.style.setProperty('--posX', `${relX * imgRect.width}px`);
+    marker.style.setProperty('--posY', `${relY * imgRect.height}px`);
+  };
 
   const fetchCharacters = async (charactersInfo) => {
     const charactersData = [];
@@ -29,7 +39,11 @@ function Level({ levelID }) {
   const fetchLevel = async () => {
     const levelSnap = await getDoc(doc(getFirestore(), 'levels', levelID));
     const levelData = levelSnap.data();
-    setLevel({ ID: levelSnap.id, name: levelData.name, imageURL: levelData.imageURL });
+    setLevel({
+      ID: levelSnap.id,
+      name: `Level ${levelData.levelNumber} - ${levelData.location}`,
+      imageURL: levelData.imageURL,
+    });
 
     const charactersData = await fetchCharacters(levelData.characters);
     setCharacters(charactersData);
@@ -40,9 +54,12 @@ function Level({ levelID }) {
   }, []);
 
   return (
-    <div>
+    <div className="level-wrapper">
       <LevelHeader name={level.name} characters={characters} />
-      <img src={level.imageURL} alt="" />
+      <div className="level-content">
+        <div className="marker" />
+        <img src={level.imageURL} alt="" onClick={handleClick} />
+      </div>
     </div>
   );
 }
