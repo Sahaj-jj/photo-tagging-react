@@ -16,9 +16,11 @@ function Level({ levelID }) {
   const [loading, setLoading] = useState(true);
 
   const handleClick = async (e) => {
-    const imgRect = e.target.getBoundingClientRect();
     setShowDrawer(!showDrawer);
-    setCoords({ x: e.clientX - imgRect.left, y: e.clientY - imgRect.top });
+    if (!showDrawer) {
+      const imgRect = e.target.getBoundingClientRect();
+      setCoords({ x: e.clientX - imgRect.left, y: e.clientY - imgRect.top });
+    }
   };
 
   const handleCharacterSelect = (characterID) => {
@@ -85,8 +87,8 @@ function Level({ levelID }) {
   }, [loading]);
 
   return (
-    <div className="level-wrapper">
-      {!loading && <LevelHeader characters={characters} />}
+    <div className={`level-wrapper${loading ? ' loading' : ''}`}>
+      <LevelHeader characters={characters} />
       <div className="level-content">
         {showDrawer && <div className="marker" />}
         {showDrawer && (

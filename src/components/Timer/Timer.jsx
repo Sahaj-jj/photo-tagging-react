@@ -4,8 +4,6 @@ import './Timer.css';
 function Timer() {
   const [seconds, setSeconds] = useState(0);
 
-  // const getFormattedTime = (secondsValue) => secondsValue;
-
   const getFormattedTime = (totalSeconds) => {
     const secondsValue = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
     const minutesValue = Math.floor((totalSeconds % (60 * 60)) / 60).toString().padStart(2, '0');
