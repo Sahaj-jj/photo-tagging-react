@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './LevelHeader.css';
+import Timer from '../Timer/Timer';
 
 function LevelHeader({ characters }) {
   return (
@@ -13,6 +14,7 @@ function LevelHeader({ characters }) {
           </div>
         ))}
       </div>
+      <Timer />
     </div>
   );
 }
