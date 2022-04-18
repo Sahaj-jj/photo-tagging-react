@@ -6,19 +6,23 @@
   align-items: center;
 }
 
-.characters-container {
+.level-header > .characters-container {
   display: flex;
   gap: 1rem;
 }
 
-.character-wrapper {
+.level-header > .characters-container > .character-wrapper {
   display: grid;
   place-items: center;
   text-align: center;
   width: 50px;
 }
 
-.character-wrapper > img {
+.level-header > .characters-container > .character-wrapper.found {
+  opacity: 0.3;
+}
+
+.level-header > .characters-container > .character-wrapper > img {
   width: inherit;
 }
 

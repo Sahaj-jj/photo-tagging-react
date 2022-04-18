@@ -7,7 +7,7 @@ function LevelHeader({ characters }) {
     <div className="level-header">
       <div className="characters-container">
         {characters.map((character) => (
-          <div key={character.ID} className="character-wrapper">
+          <div key={character.ID} className={`character-wrapper${character.found ? ' found' : ''}`}>
             <img src={character.imageURL} alt="" />
             <div className="character-name">{character.name}</div>
           </div>
