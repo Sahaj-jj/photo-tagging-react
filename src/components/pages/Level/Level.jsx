@@ -40,33 +40,30 @@ function Level({ levelID }) {
       setCharacters(characters.map((character) => (character.ID === characterID
         ? { ...character, found: true }
         : character)));
-    } else {
-      console.log('NOPE');
     }
   };
 
-  const fetchCharacters = async (charactersInfo) => {
-    const charactersData = [];
-    await Promise.all(charactersInfo.map(async (character) => {
-      const charSnap = await getDoc(doc(getFirestore(), 'characters', character.ID));
-      charactersData.push(
-        {
-          ...charSnap.data(), ID: charSnap.id, relX: character.relX, relY: character.relY,
-        },
-      );
-    }));
-    return charactersData;
-  };
-
-  const fetchLevel = async () => {
-    const levelSnap = await getDoc(doc(getFirestore(), 'levels', levelID));
-    const levelData = levelSnap.data();
-    setLevel({ ID: levelSnap.id, name: `${levelData.location}`, imageURL: levelData.imageURL });
-    const charactersData = await fetchCharacters(levelData.characters);
-    setCharacters(charactersData);
-  };
-
   useEffect(() => {
+    const fetchCharacters = async (charactersInfo) => {
+      const charactersData = [];
+      await Promise.all(charactersInfo.map(async (character) => {
+        const charSnap = await getDoc(doc(getFirestore(), 'characters', character.ID));
+        charactersData.push(
+          {
+            ...charSnap.data(), ID: charSnap.id, relX: character.relX, relY: character.relY,
+          },
+        );
+      }));
+      return charactersData;
+    };
+
+    const fetchLevel = async () => {
+      const levelSnap = await getDoc(doc(getFirestore(), 'levels', levelID));
+      const levelData = levelSnap.data();
+      setLevel({ ID: levelSnap.id, name: `${levelData.location}`, imageURL: levelData.imageURL });
+      const charactersData = await fetchCharacters(levelData.characters);
+      setCharacters(charactersData);
+    };
     fetchLevel();
   }, []);
 
@@ -83,6 +80,18 @@ function Level({ levelID }) {
   }, [coords]);
 
   useEffect(() => {
+    const foundMarkers = document.querySelectorAll('.found-marker');
+    if (foundMarkers) {
+      const imgRect = document.querySelector('.level-content > img').getBoundingClientRect();
+      foundMarkers.forEach((marker) => {
+        const character = characters.find((char) => char.ID === marker.id);
+        marker.style.setProperty('--posX', `${character.relX * imgRect.width}px`);
+        marker.style.setProperty('--posY', `${character.relY * imgRect.height}px`);
+      });
+    }
+  }, [showDrawer]);
+
+  useEffect(() => {
     if (!loading) document.querySelector('.level-content > img').classList.add('loaded');
   }, [loading]);
 
@@ -96,6 +105,9 @@ function Level({ levelID }) {
           <CharacterDrawer onCharacterSelect={handleCharacterSelect} characters={characters} />
         </div>
         )}
+        {characters.filter((character) => character.found).map((character) => (
+          <div id={character.ID} className="found-marker" />
+        ))}
         <img src={level.imageURL} alt="" onClick={handleClick} onLoad={() => { setLoading(false); }} />
       </div>
     </div>
