@@ -1,11 +1,8 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import {
-  // eslint-disable-next-line no-unused-vars
-  getFirestore, doc, getDoc, updateDoc, arrayUnion,
-} from 'firebase/firestore';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { useParams } from 'react-router-dom';
 import LevelHeader from '../../LevelHeader/LevelHeader';
 import CharacterDrawer from '../../CharacterDrawer/CharacterDrawer';
 import './Level.css';
@@ -15,7 +12,8 @@ import useTimer from '../../../hooks/useTimer';
 import LeaderboardModal from '../../LeaderboardModal/LeaderboardModal';
 import useMouse from '../../../hooks/useMouse';
 
-function Level({ levelID }) {
+function Level() {
+  const { levelID } = useParams();
   const [characters, setCharacters] = useState([]);
   const [level, setLevel] = useState({});
   const [loading, setLoading] = useState(true);
@@ -29,12 +27,6 @@ function Level({ levelID }) {
     setWin(true);
     stopTimer();
     levelImgRef.current.style.pointerEvents = 'none';
-    // await updateDoc(doc(getFirestore(), 'leaderboards', level.leaderboardID), {
-    //   entries: arrayUnion({
-    //     name: 'NEW',
-    //     time: `${time}`,
-    //   }),
-    // });
   };
 
   const handleCharacterSelect = (characterID) => {
@@ -47,7 +39,7 @@ function Level({ levelID }) {
       y: selectedCharacter.relY * imgRect.height,
     };
 
-    if (isInBounds(mouseCoords, characterCoords, 20)) {
+    if (isInBounds(mouseCoords, characterCoords, 30)) {
       setCharacters(characters.map((character) => (character.ID === characterID
         ? { ...character, found: true }
         : character)));
@@ -85,6 +77,13 @@ function Level({ levelID }) {
       const drawer = document.querySelector('.drawer-wrapper');
       drawer.style.setProperty('--posX', `${mouseCoords.x}px`);
       drawer.style.setProperty('--posY', `${mouseCoords.y}px`);
+
+      // To check Character positions on new levels
+      // const imgRect = levelImgRef.current.getBoundingClientRect();
+      // console.log({
+      //   x: mouseCoords.x / imgRect.width,
+      //   y: mouseCoords.y / imgRect.height,
+      // });
     }
   }, [showDrawer]);
 
@@ -109,7 +108,7 @@ function Level({ levelID }) {
 
   return (
     <div className={`level-wrapper${loading ? ' loading' : ''}`}>
-      {win && <LeaderboardModal time={time} />}
+      {win && <LeaderboardModal leaderboardID={level.leaderboardID} time={time} />}
       {!loading && <LevelHeader name={level.name} time={time} />}
       <div className="level-content-wrapper">
         <CharacterSidebar characters={characters} />
@@ -136,9 +135,5 @@ function Level({ levelID }) {
     </div>
   );
 }
-
-Level.propTypes = {
-  levelID: PropTypes.string.isRequired,
-};
 
 export default Level;
