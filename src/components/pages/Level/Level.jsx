@@ -48,24 +48,20 @@ function Level({ levelID }) {
   };
 
   useEffect(() => {
-    const fetchCharacters = async (charactersInfo) => {
-      const charactersData = [];
-      await Promise.all(charactersInfo.map(async (character) => {
-        const charSnap = await getDoc(doc(getFirestore(), 'characters', character.ID));
-        charactersData.push(
-          {
-            ...charSnap.data(), ID: charSnap.id, relX: character.relX, relY: character.relY,
-          },
-        );
-      }));
-      return charactersData;
-    };
-
     const fetchLevel = async () => {
       const levelSnap = await getDoc(doc(getFirestore(), 'levels', levelID));
       const levelData = levelSnap.data();
       setLevel({ ...levelData, ID: levelSnap.id });
-      const charactersData = await fetchCharacters(levelData.characters);
+      const charactersData = [];
+      await Promise.all(levelData.characters.map(async (character) => {
+        const charSnap = await getDoc(doc(getFirestore(), 'characters', character.ID));
+        charactersData.push({
+          ...charSnap.data(),
+          ID: charSnap.id,
+          relX: character.relX,
+          relY: character.relY,
+        });
+      }));
       setCharacters(charactersData);
     };
     fetchLevel();
