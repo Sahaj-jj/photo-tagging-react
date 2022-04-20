@@ -63,3 +63,8 @@
   left: calc(var(--posX) - var(--radius));
   top: calc(var(--posY) - var(--radius));
 }
+
+.timer {
+  justify-self: flex-end;
+  font-size: 2rem;
+}

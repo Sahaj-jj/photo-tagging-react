@@ -6,14 +6,16 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import LevelHeader from '../../LevelHeader/LevelHeader';
 import CharacterDrawer from '../../CharacterDrawer/CharacterDrawer';
 import './Level.css';
-import isInBounds from '../../../utils';
+import { isInBounds } from '../../../utils';
 import CharacterSidebar from '../../CharacterSidebar/CharacterSidebar';
+import useTimer from '../../../hooks/useTimer';
 
 function Level({ levelID }) {
   const [characters, setCharacters] = useState([]);
   const [level, setLevel] = useState({});
   const [loading, setLoading] = useState(true);
   const [showDrawer, setShowDrawer] = useState(false);
+  const [time, startTimer] = useTimer();
   const mouseCoords = useRef({ x: 0, y: 0 });
   const levelImgRef = useRef();
 
@@ -92,12 +94,13 @@ function Level({ levelID }) {
   useEffect(() => {
     if (!loading) {
       levelImgRef.current.classList.add('loaded');
+      startTimer();
     }
   }, [loading]);
 
   return (
     <div className={`level-wrapper${loading ? ' loading' : ''}`}>
-      {!loading && <LevelHeader name={level.name} characters={characters} />}
+      {!loading && <LevelHeader name={level.name} time={time} />}
       <div className="level-content-wrapper">
         <CharacterSidebar characters={characters} />
         <div className="level-content">
