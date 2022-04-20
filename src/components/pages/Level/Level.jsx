@@ -13,6 +13,7 @@ import { isInBounds } from '../../../utils';
 import CharacterSidebar from '../../CharacterSidebar/CharacterSidebar';
 import useTimer from '../../../hooks/useTimer';
 import LeaderboardModal from '../../LeaderboardModal/LeaderboardModal';
+import useMouse from '../../../hooks/useMouse';
 
 function Level({ levelID }) {
   const [characters, setCharacters] = useState([]);
@@ -21,16 +22,8 @@ function Level({ levelID }) {
   const [showDrawer, setShowDrawer] = useState(false);
   const [win, setWin] = useState(false);
   const [time, startTimer, stopTimer] = useTimer();
-  const mouseCoords = useRef({ x: 0, y: 0 });
+  const [mouseCoords, handleMouseMove] = useMouse();
   const levelImgRef = useRef();
-
-  const handleClick = async (e) => {
-    setShowDrawer(!showDrawer);
-    if (!showDrawer) {
-      const imgRect = e.target.getBoundingClientRect();
-      mouseCoords.current = { x: e.clientX - imgRect.left, y: e.clientY - imgRect.top };
-    }
-  };
 
   const levelWin = async () => {
     setWin(true);
@@ -54,13 +47,16 @@ function Level({ levelID }) {
       y: selectedCharacter.relY * imgRect.height,
     };
 
-    const marker = document.querySelector('.marker');
-    const markerRadius = +getComputedStyle(marker).getPropertyValue('--radius').slice(0, -2);
-
-    if (isInBounds(mouseCoords.current, characterCoords, markerRadius)) {
+    if (isInBounds(mouseCoords, characterCoords, 20)) {
       setCharacters(characters.map((character) => (character.ID === characterID
         ? { ...character, found: true }
         : character)));
+
+      if (characters
+        .filter((character) => character.ID !== selectedCharacter.ID)
+        .every((character) => character.found)) {
+        levelWin();
+      }
     }
   };
 
@@ -87,8 +83,8 @@ function Level({ levelID }) {
   useEffect(() => {
     if (showDrawer) {
       const drawer = document.querySelector('.drawer-wrapper');
-      drawer.style.setProperty('--posX', `${mouseCoords.current.x}px`);
-      drawer.style.setProperty('--posY', `${mouseCoords.current.y}px`);
+      drawer.style.setProperty('--posX', `${mouseCoords.x}px`);
+      drawer.style.setProperty('--posY', `${mouseCoords.y}px`);
     }
   }, [showDrawer]);
 
@@ -101,10 +97,6 @@ function Level({ levelID }) {
         marker.style.setProperty('--posX', `${character.relX * imgRect.width}px`);
         marker.style.setProperty('--posY', `${character.relY * imgRect.height}px`);
       });
-    }
-
-    if (characters.every((character) => character.found) && characters.length) {
-      levelWin();
     }
   });
 
@@ -122,7 +114,6 @@ function Level({ levelID }) {
       <div className="level-content-wrapper">
         <CharacterSidebar characters={characters} />
         <div className="level-content">
-          <div className="mouse marker" />
           {showDrawer && (
           <div className="drawer-wrapper">
             <div className="marker" />
@@ -136,8 +127,9 @@ function Level({ levelID }) {
             ref={levelImgRef}
             src={level.imageURL}
             alt=""
-            onClick={handleClick}
+            onClick={() => { setShowDrawer(!showDrawer); }}
             onLoad={() => { setLoading(false); }}
+            onMouseMove={handleMouseMove}
           />
         </div>
       </div>
