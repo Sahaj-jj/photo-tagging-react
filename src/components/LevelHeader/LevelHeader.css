@@ -12,26 +12,6 @@
   align-items: center;
 }
 
-.level-header > .characters-container {
-  display: flex;
-  gap: 1rem;
-}
-
-.level-header > .characters-container > .character-wrapper {
-  display: grid;
-  place-items: center;
-  text-align: center;
-  width: 50px;
-}
-
-.level-header > .characters-container > .character-wrapper.found {
-  opacity: 0.3;
-}
-
-.level-header > .characters-container > .character-wrapper > img {
-  width: inherit;
-}
-
 .level-header > .name {
   font-size: 3rem;
 }
