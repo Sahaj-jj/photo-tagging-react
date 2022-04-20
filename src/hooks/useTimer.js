@@ -10,16 +10,16 @@ function useTimer() {
     }, 1000);
   };
 
-  // const stop = () => {
-  //   clearInterval(countRef.current);
-  // };
+  const stop = () => {
+    clearInterval(countRef.current);
+  };
 
   // const reset = () => {
   //   clearInterval(countRef.current);
   //   setTimer(0);
   // };
 
-  return [time, start];
+  return [time, start, stop];
 }
 
 export default useTimer;
