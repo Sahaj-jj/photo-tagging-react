@@ -3,14 +3,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
+
 import LevelHeader from '../../LevelHeader/LevelHeader';
 import CharacterDrawer from '../../CharacterDrawer/CharacterDrawer';
-import './Level.css';
-import { isInBounds } from '../../../utils';
 import CharacterSidebar from '../../CharacterSidebar/CharacterSidebar';
-import useTimer from '../../../hooks/useTimer';
 import LeaderboardModal from '../../LeaderboardModal/LeaderboardModal';
+
+import useTimer from '../../../hooks/useTimer';
 import useMouse from '../../../hooks/useMouse';
+import useSnackbar from '../../../hooks/useSnackbar';
+
+import { isInBounds } from '../../../utils';
+import './Level.css';
+import Snackbar from '../../Snackbar/Snackbar';
 
 function Level() {
   const { levelID } = useParams();
@@ -21,6 +26,7 @@ function Level() {
   const [win, setWin] = useState(false);
   const [time, startTimer, stopTimer] = useTimer();
   const [mouseCoords, handleMouseMove] = useMouse();
+  const [active, options, showSnackbar] = useSnackbar();
   const levelImgRef = useRef();
 
   const levelWin = async () => {
@@ -40,6 +46,11 @@ function Level() {
     };
 
     if (isInBounds(mouseCoords, characterCoords, 30)) {
+      showSnackbar({
+        message: `You found ${selectedCharacter.name}`,
+        color: 'green',
+      });
+
       setCharacters(characters.map((character) => (character.ID === characterID
         ? { ...character, found: true }
         : character)));
@@ -49,6 +60,11 @@ function Level() {
         .every((character) => character.found)) {
         levelWin();
       }
+    } else {
+      showSnackbar({
+        message: `${selectedCharacter.name} not found`,
+        color: 'red',
+      });
     }
   };
 
@@ -108,6 +124,7 @@ function Level() {
 
   return (
     <div className={`level-wrapper${loading ? ' loading' : ''}`}>
+      <Snackbar active={active} options={options} />
       {win && <LeaderboardModal leaderboardID={level.leaderboardID} time={time} />}
       {!loading && <LevelHeader name={level.name} time={time} />}
       <div className="level-content-wrapper">
