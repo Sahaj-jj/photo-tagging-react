@@ -2,20 +2,25 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import {
+  // eslint-disable-next-line no-unused-vars
+  getFirestore, doc, getDoc, updateDoc, arrayUnion,
+} from 'firebase/firestore';
 import LevelHeader from '../../LevelHeader/LevelHeader';
 import CharacterDrawer from '../../CharacterDrawer/CharacterDrawer';
 import './Level.css';
 import { isInBounds } from '../../../utils';
 import CharacterSidebar from '../../CharacterSidebar/CharacterSidebar';
 import useTimer from '../../../hooks/useTimer';
+import LeaderboardModal from '../../LeaderboardModal/LeaderboardModal';
 
 function Level({ levelID }) {
   const [characters, setCharacters] = useState([]);
   const [level, setLevel] = useState({});
   const [loading, setLoading] = useState(true);
   const [showDrawer, setShowDrawer] = useState(false);
-  const [time, startTimer] = useTimer();
+  const [win, setWin] = useState(false);
+  const [time, startTimer, stopTimer] = useTimer();
   const mouseCoords = useRef({ x: 0, y: 0 });
   const levelImgRef = useRef();
 
@@ -25,6 +30,18 @@ function Level({ levelID }) {
       const imgRect = e.target.getBoundingClientRect();
       mouseCoords.current = { x: e.clientX - imgRect.left, y: e.clientY - imgRect.top };
     }
+  };
+
+  const levelWin = async () => {
+    setWin(true);
+    stopTimer();
+    levelImgRef.current.style.pointerEvents = 'none';
+    // await updateDoc(doc(getFirestore(), 'leaderboards', level.leaderboardID), {
+    //   entries: arrayUnion({
+    //     name: 'NEW',
+    //     time: `${time}`,
+    //   }),
+    // });
   };
 
   const handleCharacterSelect = (characterID) => {
@@ -85,6 +102,10 @@ function Level({ levelID }) {
         marker.style.setProperty('--posY', `${character.relY * imgRect.height}px`);
       });
     }
+
+    if (characters.every((character) => character.found) && characters.length) {
+      levelWin();
+    }
   });
 
   useEffect(() => {
@@ -96,10 +117,12 @@ function Level({ levelID }) {
 
   return (
     <div className={`level-wrapper${loading ? ' loading' : ''}`}>
+      {win && <LeaderboardModal time={time} />}
       {!loading && <LevelHeader name={level.name} time={time} />}
       <div className="level-content-wrapper">
         <CharacterSidebar characters={characters} />
         <div className="level-content">
+          <div className="mouse marker" />
           {showDrawer && (
           <div className="drawer-wrapper">
             <div className="marker" />
@@ -109,7 +132,13 @@ function Level({ levelID }) {
           {characters.filter((character) => character.found).map((character) => (
             <div key={character.ID} id={character.ID} className="found-marker" />
           ))}
-          <img ref={levelImgRef} src={level.imageURL} alt="" onClick={handleClick} onLoad={() => { setLoading(false); }} />
+          <img
+            ref={levelImgRef}
+            src={level.imageURL}
+            alt=""
+            onClick={handleClick}
+            onLoad={() => { setLoading(false); }}
+          />
         </div>
       </div>
     </div>
