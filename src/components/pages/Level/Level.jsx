@@ -27,10 +27,10 @@ function Level({ levelID }) {
     setShowDrawer(!showDrawer);
 
     const imgRect = document.querySelector('.level-content > img').getBoundingClientRect();
-    const selectedCharcater = characters.find((char) => char.ID === characterID);
+    const selectedCharacter = characters.find((char) => char.ID === characterID);
     const characterCoords = {
-      x: selectedCharcater.relX * imgRect.width,
-      y: selectedCharcater.relY * imgRect.height,
+      x: selectedCharacter.relX * imgRect.width,
+      y: selectedCharacter.relY * imgRect.height,
     };
 
     const marker = document.querySelector('.marker');
@@ -60,7 +60,7 @@ function Level({ levelID }) {
     const fetchLevel = async () => {
       const levelSnap = await getDoc(doc(getFirestore(), 'levels', levelID));
       const levelData = levelSnap.data();
-      setLevel({ ID: levelSnap.id, name: `${levelData.location}`, imageURL: levelData.imageURL });
+      setLevel({ ID: levelSnap.id, name: `${levelData.name}`, imageURL: levelData.imageURL });
       const charactersData = await fetchCharacters(levelData.characters);
       setCharacters(charactersData);
     };
@@ -97,18 +97,20 @@ function Level({ levelID }) {
 
   return (
     <div className={`level-wrapper${loading ? ' loading' : ''}`}>
-      <LevelHeader characters={characters} />
-      <div className="level-content">
-        {showDrawer && <div className="marker" />}
-        {showDrawer && (
-        <div className="drawer-wrapper">
-          <CharacterDrawer onCharacterSelect={handleCharacterSelect} characters={characters} />
+      <LevelHeader name={level.name} characters={characters} />
+      <div className="level-content-wrapper">
+        <div className="level-content">
+          {showDrawer && <div className="marker" />}
+          {showDrawer && (
+          <div className="drawer-wrapper">
+            <CharacterDrawer onCharacterSelect={handleCharacterSelect} characters={characters} />
+          </div>
+          )}
+          {characters.filter((character) => character.found).map((character) => (
+            <div id={character.ID} className="found-marker" />
+          ))}
+          <img src={level.imageURL} alt="" onClick={handleClick} onLoad={() => { setLoading(false); }} />
         </div>
-        )}
-        {characters.filter((character) => character.found).map((character) => (
-          <div id={character.ID} className="found-marker" />
-        ))}
-        <img src={level.imageURL} alt="" onClick={handleClick} onLoad={() => { setLoading(false); }} />
       </div>
     </div>
   );

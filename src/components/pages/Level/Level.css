@@ -6,22 +6,31 @@
   opacity: 0;
 }
 
-.level-wrapper > .level-content {
-  position: relative;
-  max-height: 100vh;
+.level-content-wrapper {
+  margin: 3rem 0;
 }
 
-.level-wrapper > .level-content > img {
-  height: 99vh;
+.level-wrapper > .level-content-wrapper > .level-content {
+  position: relative;
+  max-width: 75vw;
+  margin: 0 auto;
+  outline: 3px solid red;
+  outline-offset: 10px;
+  border-radius: 1px;
+}
+
+.level-wrapper > .level-content-wrapper > .level-content > img {
+  max-width: inherit;
   opacity: 0;
   transition: all .5s;
+  border-radius: 5px;
 }
 
-.level-wrapper > .level-content > img.loaded {
+.level-wrapper > .level-content-wrapper > .level-content > img.loaded {
   opacity: 1;
 }
 
-.level-wrapper > .level-content > .marker {
+.level-wrapper > .level-content-wrapper > .level-content > .marker {
   --posX: 0;
   --posY: 0;
   --radius: 25px;
@@ -35,7 +44,7 @@
   top: calc(var(--posY) - var(--radius));
 }
 
-.level-wrapper > .level-content > .drawer-wrapper {
+.level-wrapper > .level-content-wrapper > .level-content > .drawer-wrapper {
   --posX: 0;
   --posY: 0;
   position: absolute;
@@ -43,7 +52,7 @@
   top: calc(var(--posY) + .7rem);
 }
 
-.level-wrapper > .level-content > .found-marker {
+.level-wrapper > .level-content-wrapper > .level-content > .found-marker {
   --posX: 0;
   --posY: 0;
   --radius: 20px;
