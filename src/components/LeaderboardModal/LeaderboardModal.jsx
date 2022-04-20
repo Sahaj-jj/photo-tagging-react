@@ -1,12 +1,21 @@
 import React, { useEffect, useRef } from 'react';
+import {
+  doc, updateDoc, getFirestore, arrayUnion,
+} from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import './LeaderboardModal.css';
 import { getFormattedTime } from '../../utils';
 
-function LeaderboardModal({ time }) {
+function LeaderboardModal({ leaderboardID, time }) {
   const inputRef = useRef();
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    await updateDoc(doc(getFirestore(), 'leaderboards', leaderboardID), {
+      entries: arrayUnion({
+        name: inputRef.current.value,
+        time,
+      }),
+    });
   };
 
   useEffect(() => {
@@ -34,6 +43,7 @@ function LeaderboardModal({ time }) {
 }
 
 LeaderboardModal.propTypes = {
+  leaderboardID: PropTypes.string.isRequired,
   time: PropTypes.number.isRequired,
 };
 
