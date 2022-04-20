@@ -1,0 +1,23 @@
+.character-sidebar > .characters-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: clamp(1vw, 32px, 2rem);
+  gap: 1rem;
+}
+
+.character-sidebar > .characters-container > .character-wrapper {
+  width: max-content;
+  display: grid;
+  place-items: center;
+}
+
+.character-sidebar > .characters-container > .character-wrapper.found {
+  opacity: 0.3;
+}
+
+.character-sidebar > .characters-container > .character-wrapper > img {
+  width: 50px;
+}
