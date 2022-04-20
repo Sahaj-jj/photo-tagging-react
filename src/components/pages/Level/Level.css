@@ -7,12 +7,13 @@
 }
 
 .level-content-wrapper {
+  display: flex;
   margin: 3rem 0;
 }
 
 .level-wrapper > .level-content-wrapper > .level-content {
   position: relative;
-  max-width: 75vw;
+  max-width: 85vw;
   margin: 0 auto;
   outline: 3px solid red;
   outline-offset: 10px;
@@ -30,26 +31,23 @@
   opacity: 1;
 }
 
-.level-wrapper > .level-content-wrapper > .level-content > .marker {
-  --posX: 0;
-  --posY: 0;
+.level-wrapper > .level-content-wrapper > .level-content > .drawer-wrapper > .marker {
   --radius: 25px;
-  position: absolute;
   width: calc(2 * var(--radius));
   aspect-ratio: 1;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 100%;
   border: 3px solid white;
-  left: calc(var(--posX) - var(--radius));
-  top: calc(var(--posY) - var(--radius));
+  margin-left: calc(-1 * var(--radius));
+  margin-top: calc(-1 * var(--radius));
 }
 
 .level-wrapper > .level-content-wrapper > .level-content > .drawer-wrapper {
   --posX: 0;
   --posY: 0;
   position: absolute;
-  left: calc(var(--posX) + 2.5rem);
-  top: calc(var(--posY) + .7rem);
+  left: calc(var(--posX));
+  top: calc(var(--posY));
 }
 
 .level-wrapper > .level-content-wrapper > .level-content > .found-marker {
