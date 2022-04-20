@@ -1,0 +1,81 @@
+.leaderboard-modal {
+  position: fixed;
+  z-index: 10;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 2rem 7rem;
+  gap: .2rem;
+  font-size: 2rem;
+  border-radius: 15px;
+  border: 3px solid #16a34a;
+}
+
+.leaderboard-modal > form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.leaderboard-modal > form > button.submit {
+  appearance: none;
+  background: #16a34a;
+  border-radius: 0.25em;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 500;
+  font-size: 1.1rem;
+  line-height: 3em;
+  padding: 0 2rem;
+  border: none;
+}
+
+.leaderboard-modal > form > button.submit:hover {
+  filter: brightness(110%);
+}
+
+.leaderboard-modal > form > input {
+  border: none;
+  padding: .7rem 1rem;
+  background-color: transparent;
+  border-bottom: 3px solid var(--subdued-color);
+  font-size: 2rem;
+}
+
+.leaderboard-modal > form > input:focus {
+  border: none;
+  outline: none;
+  border-bottom: 3px solid #16a34a;
+}
+
+.leaderboard-modal > .text {
+  font-size: 1.2rem;
+}
+.leaderboard-modal > .time {
+  color: #16a34a;
+  font-weight: 800;
+}
+
+.leaderboard-modal > .view-leaderboard {
+  font-size: 1rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  text-decoration-color: gray;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 2px;
+}
+
+.leaderboard-modal > .view-leaderboard:hover {
+  text-decoration-color: #16a34a;
+}
