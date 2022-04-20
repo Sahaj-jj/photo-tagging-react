@@ -21,6 +21,7 @@
 }
 
 .level-wrapper > .level-content-wrapper > .level-content > img {
+  cursor: url('./../../../circle-and-cursor-arrow.png') 15 15, default;
   max-width: inherit;
   opacity: 0;
   transition: all .5s;
@@ -32,12 +33,13 @@
 }
 
 .level-wrapper > .level-content-wrapper > .level-content > .drawer-wrapper > .marker {
-  --radius: 25px;
+  --radius: 18px;
   width: calc(2 * var(--radius));
   aspect-ratio: 1;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   border-radius: 100%;
-  border: 3px solid white;
+  box-sizing: border-box;
+  border: 4px solid black;
   margin-left: calc(-1 * var(--radius));
   margin-top: calc(-1 * var(--radius));
 }
@@ -53,11 +55,11 @@
 .level-wrapper > .level-content-wrapper > .level-content > .found-marker {
   --posX: 0;
   --posY: 0;
-  --radius: 20px;
+  --radius: 26px;
   position: absolute;
   width: calc(2 * var(--radius));
   aspect-ratio: 1;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   border-radius: 100%;
   border: 3px solid red;
   left: calc(var(--posX) - var(--radius));
@@ -67,4 +69,21 @@
 .timer {
   justify-self: flex-end;
   font-size: 2rem;
+}
+
+.mouse-pointer {
+  pointer-events: none;
+  --posX: 0;
+  --posY: 0;
+  --radius: 20px;
+  position: absolute;
+  width: calc(2 * var(--radius));
+  aspect-ratio: 1;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 100%;
+  border: 3px dashed white;
+  left: calc(var(--posX));
+  top: calc(var(--posY));
+  margin-left: calc(-1 * var(--radius));
+  margin-top: calc(-1 * var(--radius));
 }
