@@ -107,7 +107,7 @@ function Level({ levelID }) {
           </div>
           )}
           {characters.filter((character) => character.found).map((character) => (
-            <div id={character.ID} className="found-marker" />
+            <div key={character.ID} id={character.ID} className="found-marker" />
           ))}
           <img ref={levelImgRef} src={level.imageURL} alt="" onClick={handleClick} onLoad={() => { setLoading(false); }} />
         </div>
