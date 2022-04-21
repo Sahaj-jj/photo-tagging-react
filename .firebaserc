@@ -1,5 +1,6 @@
 {
   "projects": {
     "default": "phototaggingapp-81880"
-  }
+  },
+  "targets": {}
 }
