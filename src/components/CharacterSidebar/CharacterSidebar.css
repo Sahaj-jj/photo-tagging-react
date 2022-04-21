@@ -1,17 +1,24 @@
+.character-sidebar {
+  position: sticky;
+  height: 0;
+  top: 110px;
+}
+
 .character-sidebar > .characters-container {
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-left: clamp(1vw, 32px, 2rem);
+  padding: 2vw;
   gap: 1rem;
+  border-right: 3px solid var(--neutral-color);
 }
 
 .character-sidebar > .characters-container > .character-wrapper {
   width: max-content;
   display: grid;
   place-items: center;
+  gap: .2rem;
 }
 
 .character-sidebar > .characters-container > .character-wrapper.found {
@@ -20,4 +27,8 @@
 
 .character-sidebar > .characters-container > .character-wrapper > img {
   width: 50px;
+}
+
+.character-sidebar > .characters-container > .character-wrapper > .character-name {
+  font-size: .8rem;
 }

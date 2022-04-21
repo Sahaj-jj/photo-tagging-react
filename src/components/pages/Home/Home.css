@@ -6,7 +6,54 @@
 }
 
 .home-page > .cards-container {
+  padding: 3rem;
   display: flex;
   flex-wrap: wrap;
   gap: 3rem;
+}
+
+.home-page > .header {
+  position: sticky;
+  top: 0px;
+  width: 100%;
+  z-index: 5;
+  background-color: var(--neutral-color);
+  border-bottom: 10px solid var(--primary-color);
+  color: var(--text-color);
+  display: flex;
+  padding: 1.5rem 2rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.home-page > .header > .heading {
+  position: absolute;
+  left:50%;
+  transform: translateX(-50%);
+  font-size: 2.5rem;
+}
+
+.home-page > .header > a {
+  padding: 0;
+}
+
+.home-page > .header button.to-leaderboard {
+  font-size: 1.7rem;
+  border: none;
+  cursor: pointer;
+  background: var(--neutral-color);
+  color: var(--text-color);
+  padding: .7rem 1.5rem;
+  display: grid;
+  place-items: center;
+  transition: all .2s;
+}
+
+.home-page > .header button.to-leaderboard > div {
+  font-size: .6rem;
+}
+
+.home-page > .header button.to-leaderboard:hover:not(div) {
+  color: var(--primary-color);
+  transform: scale(1.1);
 }

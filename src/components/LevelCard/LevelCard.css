@@ -1,0 +1,32 @@
+.level-card {
+  border-radius: 5px;
+  border: 1px solid var(--subdued-color);
+  width: fit-content;
+  position: relative;
+}
+
+.level-card > img {
+  width: 23rem;
+  border-radius: 5px 5px 0 0;
+}
+
+.level-card > .info-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .3rem 1rem;
+  border-radius: 0 0 5px 5px;
+}
+
+.level-card > .info-bar > .name {
+  flex: 1;
+}
+
+.level-card > .info-bar > .characters-container > img {
+  max-width: 35px;
+}

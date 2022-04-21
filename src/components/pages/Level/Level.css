@@ -14,15 +14,17 @@
 .level-wrapper > .level-content-wrapper > .level-content {
   position: relative;
   max-width: 85vw;
+  min-width: 800px;
   margin: 0 auto;
-  outline: 3px solid red;
-  outline-offset: 10px;
+  border: 10px solid var(--neutral-color);
+  outline: 3px solid var(--primary-color);
   border-radius: 1px;
 }
 
 .level-wrapper > .level-content-wrapper > .level-content > img {
-  cursor: url('./../../../circle-and-cursor-arrow.png') 15 15, default;
+  cursor: url('../../../assets/circle-and-cursor-arrow.png') 15 15, default;
   max-width: inherit;
+  min-width: inherit;
   opacity: 0;
   transition: all .5s;
   border-radius: 5px;
