@@ -21,13 +21,15 @@ function Level() {
   const { levelID } = useParams();
   const [characters, setCharacters] = useState([]);
   const [level, setLevel] = useState({});
+  const levelImgRef = useRef();
+
+  const [win, setWin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showDrawer, setShowDrawer] = useState(false);
-  const [win, setWin] = useState(false);
+
   const [time, startTimer, stopTimer] = useTimer();
   const [mouseCoords, handleMouseMove] = useMouse();
   const [active, options, showSnackbar] = useSnackbar();
-  const levelImgRef = useRef();
 
   const levelWin = async () => {
     setWin(true);
@@ -62,7 +64,7 @@ function Level() {
       }
     } else {
       showSnackbar({
-        message: `${selectedCharacter.name} not found`,
+        message: `${selectedCharacter.name} is not here`,
         color: 'red',
       });
     }
@@ -125,7 +127,13 @@ function Level() {
   return (
     <div className={`level-wrapper${loading ? ' loading' : ''}`}>
       <Snackbar active={active} options={options} />
-      {win && <LeaderboardModal leaderboardID={level.leaderboardID} time={time} />}
+      {win && (
+      <LeaderboardModal
+        leaderboardID={level.leaderboardID}
+        time={time}
+        handleCloseModal={() => setWin(false)}
+      />
+      )}
       {!loading && <LevelHeader name={level.name} time={time} />}
       <div className="level-content-wrapper">
         <CharacterSidebar characters={characters} />
