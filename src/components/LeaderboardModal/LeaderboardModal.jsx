@@ -1,14 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   doc, updateDoc, getFirestore, arrayUnion,
 } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import './LeaderboardModal.css';
 import { IoMdClose } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 import { getFormattedTime } from '../../utils';
 
 function LeaderboardModal({ leaderboardID, time, handleCloseModal }) {
   const inputRef = useRef();
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     await updateDoc(doc(getFirestore(), 'leaderboards', leaderboardID), {
@@ -17,6 +19,7 @@ function LeaderboardModal({ leaderboardID, time, handleCloseModal }) {
         time,
       }),
     });
+    setIsSubmitted(true);
   };
 
   useEffect(() => {
@@ -31,6 +34,7 @@ function LeaderboardModal({ leaderboardID, time, handleCloseModal }) {
       <h3 className="heading">YOU DID IT!</h3>
       <div className="text">Time taken</div>
       <div className="time">{getFormattedTime(time)}</div>
+      {!isSubmitted && (
       <form action="/" onSubmit={handleFormSubmit}>
         <input
           type="text"
@@ -41,7 +45,13 @@ function LeaderboardModal({ leaderboardID, time, handleCloseModal }) {
         />
         <button type="submit" className="submit">Submit</button>
       </form>
-      <button type="button" className="view-leaderboard">View leaderboard</button>
+      )}
+      {isSubmitted && (
+        <div className="confirmation-message">Your time has been recorded!</div>
+      )}
+      <Link to="/leaderboards">
+        <button type="button" className="view-leaderboard">View leaderboard</button>
+      </Link>
     </div>
   );
 }
