@@ -3,10 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import initializeFirebaseApp from './firebase';
 import Home from './components/pages/Home/Home';
 import Level from './components/pages/Level/Level';
+import Leaderboard from './components/pages/Leaderboard/Leaderboard';
 
 function App() {
   const [levels, setLevels] = useState([]);
@@ -40,12 +41,13 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={!loading && <Home levels={levels} characters={characters} />} />
         <Route path="/levels/:levelID" element={<Level />} />
+        <Route path="/leaderboards" element={<Leaderboard levels={levels} />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
