@@ -4,6 +4,7 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import LevelSidebar from '../../LevelSidebar/LevelSidebar';
 import './Leaderboard.css';
+import { getFormattedTime } from '../../../utils';
 
 // eslint-disable-next-line react/prop-types
 function Leaderboard({ levels }) {
@@ -37,7 +38,7 @@ function Leaderboard({ levels }) {
             <tr>
               <th>Rank#</th>
               <th>Username</th>
-              <th>Time (s)</th>
+              <th>Time</th>
             </tr>
           </thead>
           <tbody>
@@ -45,7 +46,7 @@ function Leaderboard({ levels }) {
               <tr>
                 <td className="entry-index">{index + 1}</td>
                 <td className="entry-name">{entry.name}</td>
-                <td className="entry-time">{entry.time}</td>
+                <td className="entry-time">{getFormattedTime(entry.time)}</td>
               </tr>
             ))}
           </tbody>
