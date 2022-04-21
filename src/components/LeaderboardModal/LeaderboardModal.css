@@ -88,7 +88,7 @@
   font-weight: 800;
 }
 
-.leaderboard-modal > .view-leaderboard {
+.leaderboard-modal .view-leaderboard {
   font-size: 1rem;
   margin-top: 1rem;
   cursor: pointer;
@@ -100,6 +100,6 @@
   text-decoration-thickness: 2px;
 }
 
-.leaderboard-modal > .view-leaderboard:hover {
+.leaderboard-modal .view-leaderboard:hover {
   text-decoration-color: #16a34a;
 }
