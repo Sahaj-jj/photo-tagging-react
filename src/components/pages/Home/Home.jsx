@@ -10,7 +10,11 @@ function Home({ levels, characters }) {
   return (
     <div className="home-page">
       <div className="header">
-        <h1 className="heading">Wheres Waldo</h1>
+        <h1 className="heading">
+          Where
+          {'\u0027'}
+          s Waldo
+        </h1>
         <Link to="/leaderboards">
           <button type="button" className="to-leaderboard">
             <MdLeaderboard />
