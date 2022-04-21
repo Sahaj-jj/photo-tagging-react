@@ -4,9 +4,10 @@ import {
 } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import './LeaderboardModal.css';
+import { IoMdClose } from 'react-icons/io';
 import { getFormattedTime } from '../../utils';
 
-function LeaderboardModal({ leaderboardID, time }) {
+function LeaderboardModal({ leaderboardID, time, handleCloseModal }) {
   const inputRef = useRef();
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -24,8 +25,11 @@ function LeaderboardModal({ leaderboardID, time }) {
 
   return (
     <div className="leaderboard-modal">
-      <h3 className="heading">Congratulations!</h3>
-      <div className="text">You Took</div>
+      <button type="button" className="close" onClick={handleCloseModal}>
+        <IoMdClose />
+      </button>
+      <h3 className="heading">YOU DID IT!</h3>
+      <div className="text">Time taken</div>
       <div className="time">{getFormattedTime(time)}</div>
       <form action="/" onSubmit={handleFormSubmit}>
         <input
@@ -45,6 +49,7 @@ function LeaderboardModal({ leaderboardID, time }) {
 LeaderboardModal.propTypes = {
   leaderboardID: PropTypes.string.isRequired,
   time: PropTypes.number.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
 };
 
 export default LeaderboardModal;
